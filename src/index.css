@@ -1,0 +1,43 @@
+:root {
+  font-size: 16px;
+  --board-width: 27rem;
+  --cell-size: calc(var(--board-width)/9 - 2px);
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input:invalid {
+  color: red;
+}
+
+.game-board {
+  width: var(--board-width);
+}
+
+.row {
+  display: block;
+}
+
+.square {
+  float: left;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  line-height: var(--cell-size);
+  font-size: 2rem;
+  text-align: center;
+  margin: -1px;
+  border: 1px solid black;
+}
+
+.square:hover {
+  cursor: pointer;
+}
+
+.block {
+  float: left;
+  margin: -2px;
+  border: 2px solid black;
+}
