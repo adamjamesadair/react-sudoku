@@ -1,17 +1,57 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+var _ = require('lodash');
 
-function getNeighbours(square, squares){
+Array.prototype.diff = function(a) {
+  return this.filter(function(i) {
+    return a.indexOf(i) < 0;
+  });
+};
 
+function indexToCoord(i) {}
+
+function coordToPosition(coord) {}
+
+function getNeighbours(coords, squares) {
+  let neighbours = [];
+  // Row and column neighbours
+  for (let i = 0; i < 9; i++) {
+    neighbours.push(squares[coords[0]][i]);
+    neighbours.push(squares[i][coords[1]]);
+  }
+
+  // Same block neighbours
+  let iBlockStart = Math.floor(coords[0] / 3) * 3;
+  let jBlockStart = Math.floor(coords[1] / 3) * 3;
+
+  for (let j = iBlockStart; j < iBlockStart + 3; j++) {
+    for (let k = jBlockStart; k < jBlockStart + 3; k++) {
+      neighbours.push(squares[j][k]);
+    }
+  }
+  return neighbours;
 }
 
-function fillSquare(square, squares){
-
+function getSquareValue(coords, squares) {
+  let options = Array.from(Array(9).keys());
+  let [i, j] = coords;
+  let neighbours = getNeighbours(coords, squares);
+  return (_.sample(options.diff(neighbours)));
 }
 
-function generateStartingValues(n){
-
+function generateStartingValues(n) {
+  let squares = new Array(9).fill().map(() => Array(9).fill(''));
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      squares[i][j] = getSquareValue([
+        i, j
+      ], squares);
+    }
+  }
+  console.log(squares);
+  // TODO Return convert to positions
+  return Array(81).fill('');
 }
 
 class Square extends React.Component {
@@ -24,7 +64,7 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(81).fill('')
+      squares: generateStartingValues(1)
     };
   }
 
@@ -37,9 +77,7 @@ class Board extends React.Component {
   handleSubmit(e, i) {
     const squares = this.state.squares.slice();
     squares[i] = e.target.value;
-    this.setState({
-      squares: squares
-    });
+    this.setState({squares: squares});
   }
 
   createBoard() {
