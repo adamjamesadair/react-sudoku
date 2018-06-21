@@ -2,6 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+function getNeighbours(square, squares){
+
+}
+
+function fillSquare(square, squares){
+
+}
+
+function generateStartingValues(n){
+
+}
+
 class Square extends React.Component {
   render() {
     return (<input value={this.props.value} type="text" pattern="[1-9]" maxLength="1" className="square" onChange={this.props.onChange} onKeyDown={this.props.onKeyDown}/>);
@@ -17,8 +29,6 @@ class Board extends React.Component {
   }
 
   handleKeyPress = (e) => {
-
-
     if (e.key === "Enter") {
       e.target.blur();
     }
