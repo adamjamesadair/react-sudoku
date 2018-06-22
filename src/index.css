@@ -13,6 +13,15 @@ input:invalid {
   color: red;
 }
 
+input:disabled {
+  color: black;
+  cursor: default;
+}
+input:disabled:hover {
+  color: black;
+  cursor: default;
+}
+
 .game-board {
   width: var(--board-width);
 }
@@ -40,4 +49,8 @@ input:invalid {
   float: left;
   margin: -2px;
   border: 2px solid black;
+}
+
+.initial {
+  background: #e8e8e8;
 }
