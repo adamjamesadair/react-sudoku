@@ -17,6 +17,7 @@ input:disabled {
   color: black;
   cursor: default;
 }
+
 input:disabled:hover {
   color: black;
   cursor: default;
@@ -26,7 +27,7 @@ input:disabled:hover {
   width: var(--board-width);
 }
 
-.row {
+.board-row {
   display: block;
 }
 
@@ -52,5 +53,16 @@ input:disabled:hover {
 }
 
 .initial {
-  background: #e8e8e8;
+  background: #f2f2f2;
+}
+
+.game-board {
+  margin: auto;
+  margin-top: 2rem;
+}
+
+.game-menu {
+  display: inline-block;
+  text-align: center;
+  margin-left: 1rem;
 }

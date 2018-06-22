@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as sg from './sudokuGenerator.js';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import {FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap';
 
 class Square extends React.Component {
   render() {
@@ -12,7 +14,7 @@ class Square extends React.Component {
 class Board extends React.Component {
   constructor(props) {
     super(props);
-    let startingBoard = sg.generateStartingBoard(17);
+    let startingBoard = sg.generateStartingBoard(this.props.initial);
     this.state = {
       squares: startingBoard
     };
@@ -43,7 +45,7 @@ class Board extends React.Component {
         for (let k = 0; k < 3; k++) {
           row.push(this.renderSquare(i * 9 + j * 3 + k));
         }
-        block.push(<div className="row" key={j}>{row}</div>);
+        block.push(<div className="board-row" key={j}>{row}</div>);
       }
       board.push(<div className="block" key={i}>{block}</div>);
     }
@@ -66,11 +68,32 @@ class Board extends React.Component {
   }
 }
 
+class Menu extends React.Component {
+  render() {
+    return (<form>
+      <FormGroup controlId="formControlsSelect">
+        <ControlLabel>Initial cells</ControlLabel>
+        <FormControl componentClass="select" placeholder="select">
+          <option value="select">17 - Extreme</option>
+          <option value="select">26 - Hard</option>
+          <option value="select">33 - Medium</option>
+          <option value="select">40 - Easy</option>
+          <option value="select">50 - Beginner</option>
+        </FormControl>
+      </FormGroup>
+      <button>Submit</button>
+    </form>);
+  }
+}
+
 class Game extends React.Component {
   render() {
     return (<div className="game">
       <div className="game-board">
-        <Board/>
+        <Board initial={33}/>
+      </div>
+      <div className="game-menu">
+        <Menu/>
       </div>
     </div>);
   }
