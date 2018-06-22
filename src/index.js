@@ -9,22 +9,22 @@ var _ = require('lodash');
 //   });
 // };
 
-function coordsToPositions(squares) {}
+function getCell(x, y, cells) {
+  return (cells.filter(function(cell) {
+    return (cell.coords[0] === x && cell.coords[1] === y)
+  })[0]);
+}
 
 function getNeighbours(coords, cells) {
   let neighbours = [];
   // Row and column neighbours
   for (let i = 0; i < 9; i++) {
-    let col = cells.filter(function(cell) {
-      return (cell.coords[0] == coords[0] && cell.coords[1] == i);
-    });
-    let row = cells.filter(function(cell) {
-      return (cell.coords[0] == i && cell.coords[1] == coords[1]);
-    });
-    if (col[0])
-      neighbours.push(col[0].value);
-    if (row[0])
-      neighbours.push(row[0].value);
+    let col = getCell(coords[0], i, cells);
+    let row = getCell(i, coords[1], cells);
+    if (col)
+      neighbours.push(col.value);
+    if (row)
+      neighbours.push(row.value);
     }
 
   // Same block neighbours
@@ -33,11 +33,9 @@ function getNeighbours(coords, cells) {
 
   for (let j = iBlockStart; j < iBlockStart + 3; j++) {
     for (let k = jBlockStart; k < jBlockStart + 3; k++) {
-      let block = cells.filter(function(cell) {
-        return (cell.coords[0] == j && cell.coords[1] == k);
-      });
-      if (block[0])
-        neighbours.push(block[0].value);
+      let block = getCell(j, k, cells);
+      if (block)
+        neighbours.push(block.value);
       }
     }
   return neighbours;
@@ -52,23 +50,22 @@ function getNeighbours(coords, cells) {
 // }
 
 function fillCellsWrapper(cells) {
-  let emptyCells = cells;
-  fillCells(emptyCells);
+  let emptyCells = cells.slice();
+  fillCells(emptyCells, cells);
 }
 
-function fillCells(emptyCells) {
+function fillCells(emptyCells, cells) {
   let cell = emptyCells.shift();
-
-  let neighbours = getNeighbours(cell.coords, emptyCells);
+  let neighbours = getNeighbours(cell.coords, cells);
   let options = _.difference(Array.from(Array(9).keys()), neighbours);
-  console.log(neighbours);
-  for (let option of options) {
+  for (let option of _.shuffle(options)) {
+    //getCell(cell.coords[0], cell.coords[1], cells).value = 5;
     cell.value = option;
-    if (emptyCells.length == 0) {
+    if (emptyCells.length === 0) {
       return true;
     }
 
-    if (fillCells(emptyCells)) {
+    if (fillCells(emptyCells, cells)) {
       return true;
     }
   }
@@ -83,6 +80,7 @@ function fillCells(emptyCells) {
   //     cell.value = cellValue;
   //   }));
   //});
+
 }
 
 function generateStartingValues(n) {
