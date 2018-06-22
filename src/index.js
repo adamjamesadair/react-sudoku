@@ -13,12 +13,10 @@ function getNeighbours(coords, cells) {
   let neighbours = [];
   // Row and column neighbours
   for (let i = 0; i < 9; i++) {
-    let col = getCell(coords[0], i, cells);
-    let row = getCell(i, coords[1], cells);
-    if (col)
-      neighbours.push(col.value);
-    if (row)
-      neighbours.push(row.value);
+    if (i !== coords[1])
+      neighbours.push(getCell(coords[0], i, cells).value);
+    if (i !== coords[0])
+      neighbours.push(getCell(i, coords[1], cells).value);
     }
 
   // Same block neighbours
@@ -27,47 +25,53 @@ function getNeighbours(coords, cells) {
 
   for (let j = iBlockStart; j < iBlockStart + 3; j++) {
     for (let k = jBlockStart; k < jBlockStart + 3; k++) {
-      let block = getCell(j, k, cells);
-      if (block)
-        neighbours.push(block.value);
+      if (j !== coords[0] || k !== coords[1])
+        neighbours.push(getCell(j, k, cells).value);
       }
     }
   return neighbours;
 }
 
 function fillCells(cells) {
-  let emptyCells = cells.slice();
-  generateCellValues(emptyCells, cells);
+  let remainingCells = cells.slice();
+  generateCellValues(remainingCells, cells);
 }
 
-function generateCellValues(emptyCells, cells) {
-  let cell = emptyCells.shift();
+function generateCellValues(remainingCells, cells) {
+  let cell = remainingCells.shift();
   let neighbours = getNeighbours(cell.coords, cells);
-  let options = _.difference(Array.from(Array(9).keys()), neighbours);
+  let options = _.difference(_.range(1, 10), neighbours);
   for (let option of _.shuffle(options)) {
+    //if (!cell.initial)
     cell.value = option;
-    if (emptyCells.length === 0) {
+    if (remainingCells.length === 0) {
       return true;
     }
 
-    if (generateCellValues(emptyCells, cells)) {
+    if (generateCellValues(remainingCells, cells)) {
       return true;
     }
   }
 
   cell.value = '';
-  emptyCells.unshift(cell);
+  remainingCells.unshift(cell);
   return false;
 }
 
-function cellsToList(cells) {
+function elementsToPositions(elements) {
   let list = [];
+  let index;
 
   for (let t = 0; t < 3; t++) {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         for (let k = 0; k < 3; k++) {
-          list.push(cells[27 * t + i * 3 + j * 9 + k].value + 1);
+          index = 27 * t + i * 3 + j * 9 + k;
+          if (elements[0] instanceof Cell) {
+            list.push(elements[index].value);
+          } else {
+            list.push(elements[index]);
+          }
         }
       }
     }
@@ -75,23 +79,49 @@ function cellsToList(cells) {
   return list;
 }
 
-function generateStartingValues(n) {
+function solve(board) {
+  let cells = initCells();
+  board = elementsToPositions(board);
+  cells.forEach((cell, i) => {
+    cell.value = board[i];
+    if (board[i])
+      cell.initial = true;
+    }
+  );
+  fillCells(cells);
+  return elementsToPositions(cells);
+}
+
+function initCells() {
   let cells = [];
-  // init squares
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
       cells.push(new Cell([i, j]));
     }
   }
+  return cells;
+}
 
+function generateStartingBoard(n) {
+  let cells = initCells();
   fillCells(cells);
-  return cellsToList(cells);
+  let sudoku = elementsToPositions(cells);
+  let board = Array(81).fill('');
+  _.shuffle(_.range(81)).slice(81 - n).forEach((i) => {
+    board[i] = sudoku[i];
+  });
+
+  if (solve(board).includes(''))
+    console.log('unsolvable');
+
+  return board;
 }
 
 class Cell {
-  constructor(coords) {
+  constructor(coords, value = '', initial = false) {
     this.coords = coords;
-    this.value = '';
+    this.value = value;
+    this.initial = initial;
   }
 }
 
@@ -105,7 +135,7 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: generateStartingValues(1)
+      squares: generateStartingBoard(17)
     };
   }
 
