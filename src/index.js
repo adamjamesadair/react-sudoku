@@ -3,12 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 var _ = require('lodash');
 
-// Array.prototype.diff = function(a) {
-//   return this.filter(function(i) {
-//     return a.indexOf(i) < 0;
-//   });
-// };
-
 function getCell(x, y, cells) {
   return (cells.filter(function(cell) {
     return (cell.coords[0] === x && cell.coords[1] === y)
@@ -41,31 +35,22 @@ function getNeighbours(coords, cells) {
   return neighbours;
 }
 
-// function getCellValue(cell, cells) {
-//   return new Promise(function(resolve) {
-//     let options = Array.from(Array(9).keys());
-//     let neighbours = getNeighbours(cell.coords, cells);
-//     resolve(_.sample(options.diff(neighbours)));
-//   });
-// }
-
-function fillCellsWrapper(cells) {
+function fillCells(cells) {
   let emptyCells = cells.slice();
-  fillCells(emptyCells, cells);
+  generateCellValues(emptyCells, cells);
 }
 
-function fillCells(emptyCells, cells) {
+function generateCellValues(emptyCells, cells) {
   let cell = emptyCells.shift();
   let neighbours = getNeighbours(cell.coords, cells);
   let options = _.difference(Array.from(Array(9).keys()), neighbours);
   for (let option of _.shuffle(options)) {
-    //getCell(cell.coords[0], cell.coords[1], cells).value = 5;
     cell.value = option;
     if (emptyCells.length === 0) {
       return true;
     }
 
-    if (fillCells(emptyCells, cells)) {
+    if (generateCellValues(emptyCells, cells)) {
       return true;
     }
   }
@@ -73,14 +58,21 @@ function fillCells(emptyCells, cells) {
   cell.value = '';
   emptyCells.unshift(cell);
   return false;
+}
 
-  // let chain = Promise.resolve();
-  // emptyCells.forEach((cell) => {
-  //   chain = chain.then(() => getCellValue(cell, emptyCells).then((cellValue) => {
-  //     cell.value = cellValue;
-  //   }));
-  //});
+function cellsToList(cells) {
+  let list = [];
 
+  for (let t = 0; t < 3; t++) {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        for (let k = 0; k < 3; k++) {
+          list.push(cells[27 * t + i * 3 + j * 9 + k].value + 1);
+        }
+      }
+    }
+  }
+  return list;
 }
 
 function generateStartingValues(n) {
@@ -92,10 +84,8 @@ function generateStartingValues(n) {
     }
   }
 
-  fillCellsWrapper(cells);
-  console.log(cells);
-  // TODO Return convert to positions
-  return Array(81).fill('');
+  fillCells(cells);
+  return cellsToList(cells);
 }
 
 class Cell {
