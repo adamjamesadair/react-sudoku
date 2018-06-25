@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import * as sg from './sudokuGenerator.js';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import {FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap';
+import {FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
 
 class Square extends React.Component {
   render() {
@@ -69,31 +69,52 @@ class Board extends React.Component {
 }
 
 class Menu extends React.Component {
+  constructor(props) {
+    super(props);
+    this.initialFilled = 33;
+  }
+
   render() {
-    return (<form>
-      <FormGroup controlId="formControlsSelect">
-        <ControlLabel>Initial cells</ControlLabel>
-        <FormControl componentClass="select" placeholder="select">
-          <option value="select">17 - Extreme</option>
-          <option value="select">26 - Hard</option>
-          <option value="select">33 - Medium</option>
-          <option value="select">40 - Easy</option>
-          <option value="select">50 - Beginner</option>
-        </FormControl>
-      </FormGroup>
-      <button>Submit</button>
-    </form>);
+    return (<div>
+      <form>
+        <FormGroup controlId="formControlsSelect">
+          <ControlLabel>Initial cells</ControlLabel>
+          <FormControl defaultValue={this.initialFilled} inputRef={input => this.initialFilled = input} componentClass="select" placeholder="select">
+            <option value="17">17 - Extreme</option>
+            <option value="26">26 - Hard</option>
+            <option value="33">33 - Medium</option>
+            <option value="40">40 - Easy</option>
+            <option value="50">50 - Beginner</option>
+          </FormControl>
+        </FormGroup>
+      </form>
+      <button onClick={() => {
+          this.props.onGenerate(this.initialFilled.value);
+        }}>Generate</button>
+    </div>);
+
   }
 }
 
 class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      initial: 33
+    };
+  }
+
+  handleGeneration = (initial) => {
+    this.setState({initial: initial});
+  };
+
   render() {
     return (<div className="game">
       <div className="game-board">
-        <Board initial={33}/>
+        <Board key={this.state.initial} initial={this.state.initial}/>
       </div>
       <div className="game-menu">
-        <Menu/>
+        <Menu onGenerate={this.handleGeneration}/>
       </div>
     </div>);
   }
