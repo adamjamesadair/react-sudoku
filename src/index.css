@@ -66,3 +66,12 @@ input:disabled:hover {
   text-align: center;
   margin-left: 1rem;
 }
+
+.generate-btn{
+  background-color: #f8f8f8;
+}
+
+.generate-btn:hover{
+  background-color: navy;
+  color: white;
+}
