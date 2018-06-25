@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import * as sg from './sudokuGenerator.js';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import {FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
+import {FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap';
+var _ = require('lodash');
 
 class Square extends React.Component {
   render() {
@@ -79,7 +80,7 @@ class Menu extends React.Component {
       <form>
         <FormGroup controlId="formControlsSelect">
           <ControlLabel>Initial cells</ControlLabel>
-          <FormControl defaultValue={this.initialFilled} inputRef={input => this.initialFilled = input} componentClass="select" placeholder="select">
+          <FormControl className="difficulty-select" defaultValue={this.initialFilled} inputRef={input => this.initialFilled = input} componentClass="select" placeholder="select">
             <option value="17">17 - Extreme</option>
             <option value="26">26 - Hard</option>
             <option value="33">33 - Medium</option>
@@ -88,9 +89,9 @@ class Menu extends React.Component {
           </FormControl>
         </FormGroup>
       </form>
-      <button onClick={() => {
+      <Button className="generate-btn" onClick={() => {
           this.props.onGenerate(this.initialFilled.value);
-        }}>Generate</button>
+        }}>Generate</Button>
     </div>);
 
   }
@@ -105,13 +106,15 @@ class Game extends React.Component {
   }
 
   handleGeneration = (initial) => {
-    this.setState({initial: initial});
+    this.setState({
+      initial: initial
+    });
   };
 
   render() {
     return (<div className="game">
       <div className="game-board">
-        <Board key={this.state.initial} initial={this.state.initial}/>
+        <Board key={_.random(0, 1000)} initial={this.state.initial}/>
       </div>
       <div className="game-menu">
         <Menu onGenerate={this.handleGeneration}/>
