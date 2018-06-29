@@ -34,6 +34,13 @@ class Board extends React.Component {
     this.setState({squares: squares});
   }
 
+  handleValidation(squares) {
+    const cells = squares.slice();
+    cells.forEach((cell) => {
+      console.log(cell);
+    });
+  }
+
   createBoard() {
     let board = [];
     let row;
@@ -50,6 +57,9 @@ class Board extends React.Component {
       }
       board.push(<div className="block" key={i}>{block}</div>);
     }
+    board.push(<Button className="validation" onClick={() => {
+        this.handleValidation(this.state.squares)
+      }} key={"v-" + _.random(0, 1000)}>validate</Button>);
     return (board);
   }
 
@@ -106,9 +116,7 @@ class Game extends React.Component {
   }
 
   handleGeneration = (initial) => {
-    this.setState({
-      initial: initial
-    });
+    this.setState({initial: initial});
   };
 
   render() {

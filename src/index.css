@@ -67,11 +67,11 @@ input:disabled:hover {
   margin-left: 1rem;
 }
 
-.generate-btn{
+Button{
   background-color: #f8f8f8;
 }
 
-.generate-btn:hover{
+Button:hover{
   background-color: navy;
   color: white;
 }
