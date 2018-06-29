@@ -39,7 +39,7 @@ input:disabled:hover {
   font-size: 2rem;
   text-align: center;
   margin: -1px;
-  color: black;
+  color: blue;
   border: 1px solid black;
 }
 
@@ -59,24 +59,36 @@ input:disabled:hover {
 
 .conflict {
   color: #f43a3a;
+  background-color: pink;
 }
 
-.game-board {
-  margin: auto;
+.game {
   margin-top: 2rem;
 }
 
+.game-board {
+  position: relative;
+  margin: auto;
+}
+
 .game-menu {
-  display: inline-block;
+  position: absolute;
+  top: 0;
+  right: -10rem;
+  width: 10rem;
   text-align: center;
-  margin-left: 1rem;
+  padding: 5px;
 }
 
-Button{
-  background-color: #f8f8f8;
+Button {
+  background-color: lightblue;;
 }
 
-Button:hover{
+Button:hover {
   background-color: navy;
   color: white;
+}
+
+.validation {
+  margin-top: 1rem;
 }

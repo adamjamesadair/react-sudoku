@@ -70,7 +70,7 @@ class Board extends React.Component {
     }
     board.push(<Button className="validation" onClick={() => {
         this.handleValidation(this.state.squares)
-      }} key={"v-" + _.random(0, 1000)}>validate</Button>);
+      }} key={"v-" + _.random(0, 1000)}>Validate</Button>);
     return (board);
   }
 
@@ -135,9 +135,9 @@ class Game extends React.Component {
     return (<div className="game">
       <div className="game-board">
         <Board key={_.random(0, 1000)} initial={this.state.initial}/>
-      </div>
-      <div className="game-menu">
-        <Menu onGenerate={this.handleGeneration}/>
+        <div className="game-menu">
+          <Menu onGenerate={this.handleGeneration}/>
+        </div>
       </div>
     </div>);
   }
