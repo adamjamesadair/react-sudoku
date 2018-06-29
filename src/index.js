@@ -35,6 +35,7 @@ class Board extends React.Component {
 
   handleValidation(squares) {
     const cells = sg.elementsToPositions(squares.slice());
+
     let neighbours;
     cells.forEach((cell) => {
       if (cell.value) {
@@ -51,6 +52,13 @@ class Board extends React.Component {
     });
     let newSquares = sg.elementsToPositions(cells);
     this.setState({squares: newSquares});
+
+    // Check for win
+    let hasConflict = cells.map(cell => cell.classes).map(set => set.has(" conflict")).includes(true);
+    let hasEmpty = cells.map(cell => cell.value).includes('');
+    if (!hasEmpty && !hasConflict) {
+      console.log('Puzzle Solved!!');
+    }
   }
 
   createBoard() {
@@ -100,6 +108,7 @@ class Menu extends React.Component {
 
   render() {
     return (<div>
+      <h5>Generate New</h5>
       <form>
         <FormGroup controlId="formControlsSelect">
           <ControlLabel>Initial cells</ControlLabel>
@@ -109,6 +118,8 @@ class Menu extends React.Component {
             <option value="33">33 - Medium</option>
             <option value="40">40 - Easy</option>
             <option value="50">50 - Beginner</option>
+            <option value="80">80 - Testing</option>
+            <option value="81">81 - Solved</option>
           </FormControl>
         </FormGroup>
       </form>

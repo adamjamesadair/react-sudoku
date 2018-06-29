@@ -33,6 +33,7 @@ input:disabled:hover {
 
 .square {
   float: left;
+  font-family: Comic Sans MS;
   width: var(--cell-size);
   height: var(--cell-size);
   line-height: var(--cell-size);
@@ -54,7 +55,7 @@ input:disabled:hover {
 }
 
 .initial {
-  background: #f2f2f2;
+  font-family: Times;
 }
 
 .conflict {
