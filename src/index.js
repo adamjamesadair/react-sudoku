@@ -42,14 +42,15 @@ class Board extends React.Component {
         neighbours = sg.getNeighbours(cell.coords, cells);
         neighbours.forEach((neighbour, i) => {
           if (neighbour) {
-            if (neighbour.value == cell.value) {
+            if (String(neighbour.value) === String(cell.value)) {
               cell.classes.add(" conflict");
             }
           }
         });
       }
     });
-    this.setState({squares: sg.elementsToPositions(cells)});
+    let newSquares = sg.elementsToPositions(cells);
+    this.setState({squares: newSquares});
   }
 
   createBoard() {

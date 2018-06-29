@@ -1,6 +1,7 @@
 var _ = require('lodash');
 
 export function getNeighbours(coords, cells) {
+  cells = resetCoords(cells);
   let neighbours = [];
   // Row and column neighbours
   for (let i = 0; i < 9; i++) {
@@ -71,6 +72,17 @@ export function elementsToPositions(elements) {
   return cells;
 }
 
+export function resetCoords(cells) {
+  let coords = [];
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      coords.push([i, j]);
+    }
+  }
+  cells.forEach((cell) => cell.coords = coords.shift());
+  return cells;
+}
+
 export function initCells() {
   let cells = [];
   for (let i = 0; i < 9; i++) {
@@ -96,11 +108,10 @@ export function generateStartingBoard(n) {
 }
 
 class Cell {
-  constructor(coords, value = '', initial = false, conflicting = false, classes = new Set(["square"])) {
+  constructor(coords, value = '', initial = false, classes = new Set(["square"])) {
     this.coords = coords;
     this.value = value;
     this.initial = initial;
-    this.conflicting = conflicting;
     this.classes = classes;
   }
 }
