@@ -5,10 +5,10 @@ export function getNeighbours(coords, cells) {
   // Row and column neighbours
   for (let i = 0; i < 9; i++) {
     if (i !== coords[1])
-      neighbours.push(getCell(coords[0], i, cells).value);
+      neighbours.push(getCell(coords[0], i, cells));
     if (i !== coords[0])
-      neighbours.push(getCell(i, coords[1], cells).value);
-    }
+      neighbours.push(getCell(i, coords[1], cells));
+  }
 
   // Same block neighbours
   let iBlockStart = Math.floor(coords[0] / 3) * 3;
@@ -17,9 +17,9 @@ export function getNeighbours(coords, cells) {
   for (let j = iBlockStart; j < iBlockStart + 3; j++) {
     for (let k = jBlockStart; k < jBlockStart + 3; k++) {
       if (j !== coords[0] || k !== coords[1])
-        neighbours.push(getCell(j, k, cells).value);
-      }
+        neighbours.push(getCell(j, k, cells));
     }
+  }
   return neighbours;
 }
 
@@ -37,7 +37,7 @@ export function fillCells(cells) {
 export function generateCellValues(remainingCells, cells) {
   let cell = remainingCells.shift();
   let neighbours = getNeighbours(cell.coords, cells);
-  let options = _.difference(_.range(1, 10), neighbours);
+  let options = _.difference(_.range(1, 10), neighbours.map((neighbour) => neighbour ? neighbour.value : 0));
   for (let option of _.shuffle(options)) {
     cell.value = option;
     if (remainingCells.length === 0) {
@@ -55,7 +55,7 @@ export function generateCellValues(remainingCells, cells) {
 }
 
 export function elementsToPositions(elements) {
-  let list = [];
+  let cells = [];
   let index;
 
   for (let t = 0; t < 3; t++) {
@@ -63,29 +63,12 @@ export function elementsToPositions(elements) {
       for (let j = 0; j < 3; j++) {
         for (let k = 0; k < 3; k++) {
           index = 27 * t + i * 3 + j * 9 + k;
-          if (elements[0] instanceof Cell) {
-            list.push(elements[index].value);
-          } else {
-            list.push(elements[index]);
-          }
+          cells.push(elements[index]);
         }
       }
     }
   }
-  return list;
-}
-
-export function solve(board) {
-  let cells = initCells();
-  board = elementsToPositions(board);
-  cells.forEach((cell, i) => {
-    cell.value = board[i];
-    if (board[i])
-      cell.initial = true;
-    }
-  );
-  fillCells(cells);
-  return elementsToPositions(cells);
+  return cells;
 }
 
 export function initCells() {
@@ -102,21 +85,22 @@ export function generateStartingBoard(n) {
   let cells = initCells();
   fillCells(cells);
   let sudoku = elementsToPositions(cells);
-  let board = Array(81).fill('');
+  let board = initCells();
   _.shuffle(_.range(81)).slice(81 - n).forEach((i) => {
+    sudoku[i].initial = true;
+    sudoku[i].classes.add(" initial");
     board[i] = sudoku[i];
   });
-
-  if (solve(board).includes(''))
-    console.log('unsolvable');
 
   return board;
 }
 
 class Cell {
-  constructor(coords, value = '', initial = false) {
+  constructor(coords, value = '', initial = false, conflicting = false, classes = new Set(["square"])) {
     this.coords = coords;
     this.value = value;
     this.initial = initial;
+    this.conflicting = conflicting;
+    this.classes = classes;
   }
 }

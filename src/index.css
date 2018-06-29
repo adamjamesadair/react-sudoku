@@ -39,6 +39,7 @@ input:disabled:hover {
   font-size: 2rem;
   text-align: center;
   margin: -1px;
+  color: black;
   border: 1px solid black;
 }
 
@@ -54,6 +55,10 @@ input:disabled:hover {
 
 .initial {
   background: #f2f2f2;
+}
+
+.conflict {
+  color: #f43a3a;
 }
 
 .game-board {

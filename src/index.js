@@ -19,7 +19,6 @@ class Board extends React.Component {
     this.state = {
       squares: startingBoard
     };
-    this.initialSquares = startingBoard.map((cell) => cell !== '');
   }
 
   handleKeyPress = (e) => {
@@ -30,15 +29,27 @@ class Board extends React.Component {
 
   handleSubmit(e, i) {
     const squares = this.state.squares.slice();
-    squares[i] = e.target.value;
+    squares[i].value = e.target.value;
     this.setState({squares: squares});
   }
 
   handleValidation(squares) {
-    const cells = squares.slice();
+    const cells = sg.elementsToPositions(squares.slice());
+    let neighbours;
     cells.forEach((cell) => {
-      console.log(cell);
+      if (cell.value) {
+        cell.classes.delete(" conflict");
+        neighbours = sg.getNeighbours(cell.coords, cells);
+        neighbours.forEach((neighbour, i) => {
+          if (neighbour) {
+            if (neighbour.value == cell.value) {
+              cell.classes.add(" conflict");
+            }
+          }
+        });
+      }
     });
+    this.setState({squares: sg.elementsToPositions(cells)});
   }
 
   createBoard() {
@@ -64,14 +75,15 @@ class Board extends React.Component {
   }
 
   renderSquare(i) {
-    let className = "square";
     let disabled = false;
-    if (this.initialSquares[i]) {
-      className += " initial";
+    if (this.state.squares[i].initial) {
       disabled = true;
     }
 
-    return (<Square value={this.state.squares[i]} disabled={disabled} className={className} key={i} onKeyDown={this.handleKeyPress} onChange={(e) => this.handleSubmit(e, i)}/>);
+    let className = "";
+    this.state.squares[i].classes.forEach((element) => className += element);
+
+    return (<Square value={this.state.squares[i].value} disabled={disabled} className={className} key={i} onKeyDown={this.handleKeyPress} onChange={(e) => this.handleSubmit(e, i)}/>);
   }
 
   render() {
