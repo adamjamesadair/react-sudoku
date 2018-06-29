@@ -2,13 +2,13 @@ var _ = require('lodash');
 
 export function getNeighbours(coords, cells) {
   cells = resetCoords(cells);
-  let neighbours = [];
+  let neighbours = new Set([]);
   // Row and column neighbours
   for (let i = 0; i < 9; i++) {
     if (i !== coords[1])
-      neighbours.push(getCell(coords[0], i, cells));
+      neighbours.add(getCell(coords[0], i, cells));
     if (i !== coords[0])
-      neighbours.push(getCell(i, coords[1], cells));
+      neighbours.add(getCell(i, coords[1], cells));
   }
 
   // Same block neighbours
@@ -18,10 +18,10 @@ export function getNeighbours(coords, cells) {
   for (let j = iBlockStart; j < iBlockStart + 3; j++) {
     for (let k = jBlockStart; k < jBlockStart + 3; k++) {
       if (j !== coords[0] || k !== coords[1])
-        neighbours.push(getCell(j, k, cells));
+        neighbours.add(getCell(j, k, cells));
     }
   }
-  return neighbours;
+  return Array.from(neighbours);
 }
 
 export function getCell(x, y, cells) {
@@ -38,7 +38,7 @@ export function fillCells(cells) {
 export function generateCellValues(remainingCells, cells) {
   let cell = remainingCells.shift();
   let neighbours = getNeighbours(cell.coords, cells);
-  let options = _.difference(_.range(1, 10), neighbours.map((neighbour) => neighbour ? neighbour.value : 0));
+  let options = _.difference(_.range(1, 10), neighbours.map(neighbour => neighbour.value));
   for (let option of _.shuffle(options)) {
     cell.value = option;
     if (remainingCells.length === 0) {
