@@ -21,6 +21,7 @@ input:disabled {
 input:disabled:hover {
   color: black;
   cursor: default;
+  background-color: white;
 }
 
 .game-board {
@@ -47,6 +48,7 @@ input:disabled:hover {
 
 .square:hover {
   cursor: pointer;
+  background-color: #dbdbdb;
 }
 
 .block {
