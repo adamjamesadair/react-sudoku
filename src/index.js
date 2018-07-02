@@ -25,6 +25,7 @@ class Game extends React.Component {
           <Menu onGenerate={this.handleGeneration}/>
         </div>
       </div>
+      <a className="github-link" href="https://github.com/adamjamesadair/react-sudoku">View Code on Github.</a>
     </div>);
   }
 }

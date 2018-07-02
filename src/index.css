@@ -71,7 +71,7 @@ input:disabled:hover {
 }
 
 .game {
-  margin-top: 12vh;
+  margin-top: 10vh;
 }
 
 .game-board {
@@ -81,7 +81,7 @@ input:disabled:hover {
 
 .game-menu {
   position: absolute;
-  top: 0;
+  top: 2.5rem;
   right: -10rem;
   width: 10rem;
   text-align: center;
@@ -111,4 +111,14 @@ Button:hover {
 
 .instructions {
   margin-top: 1rem;
+}
+
+.title {
+  text-align: center;
+}
+
+.github-link{
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 }
