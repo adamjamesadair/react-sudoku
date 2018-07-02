@@ -31,7 +31,7 @@ export default class Board extends React.Component {
   handleValidation(squares) {
     const cells = sg.elementsToPositions(squares.slice());
     let emptyCells = cells.map(cell => cell.value === '').filter(v => v).length;
-    let msg = 'Looks good! ' + emptyCells + ' cells to go!';
+    let msg = 'No conflicts, ' + emptyCells + ' cells to go!';
     let color = 'blue';
 
     let neighbours;
