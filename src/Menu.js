@@ -23,15 +23,15 @@ export default class Menu extends React.Component {
           <ControlLabel>Initial cells</ControlLabel>
           <FormControl className="difficulty-select" defaultValue={this.initialFilled} inputRef={input => this.initialFilled = input} componentClass="select" placeholder="select">
             <option value="17">17 - Extreme</option>
-            {this.renderOptions(18, 25)}
+            {this.renderOptions(18, 26)}
             <option value="26">26 - Hard</option>
-            {this.renderOptions(27, 32)}
+            {this.renderOptions(27, 33)}
             <option value="33">33 - Medium</option>
-            {this.renderOptions(34, 39)}
+            {this.renderOptions(34, 40)}
             <option value="40">40 - Easy</option>
-            {this.renderOptions(41, 49)}
+            {this.renderOptions(41, 50)}
             <option value="50">50 - Beginner</option>
-            {this.renderOptions(50, 64)}
+            {this.renderOptions(50, 65)}
             <option value="65">65 - Baby</option>
             {this.renderOptions(66, 81)}
             <option value="81">81 - Solved</option>
