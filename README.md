@@ -9,4 +9,4 @@ A simple Sudoku generator implemented in React. Select the number of initial cel
 ### How to run it
 - Clone or download the repository.
 - Run `npm start` in the new directory.
-- Open (https://localhost:3000) to view it in the browser.
+- Open https://localhost:3000 to view it in the browser.
