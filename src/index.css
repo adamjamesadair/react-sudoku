@@ -41,6 +41,7 @@ input:disabled:hover {
   text-align: center;
   margin: -1px;
   color: blue;
+  background-color: white;
   border: 1px solid black;
 }
 
@@ -63,8 +64,12 @@ input:disabled:hover {
   background-color: pink;
 }
 
+.conflict:not(.initial) {
+  background-color: #ffa5a5;
+}
+
 .game {
-  margin-top: 2rem;
+  margin-top: 12vh;
 }
 
 .game-board {
@@ -82,7 +87,7 @@ input:disabled:hover {
 }
 
 Button {
-  background-color: lightblue;;
+  background-color: lightblue;
 }
 
 Button:hover {
@@ -91,5 +96,17 @@ Button:hover {
 }
 
 .validation {
+  margin-top: 1rem;
+}
+
+.status {
+  position: absolute;
+  top: 25.75rem;
+  left: 8rem;
+  font-size: 1.5rem;
+  color: blue;
+}
+
+.instructions {
   margin-top: 1rem;
 }

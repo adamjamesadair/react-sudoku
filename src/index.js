@@ -17,7 +17,11 @@ class Board extends React.Component {
     super(props);
     let startingBoard = sg.generateStartingBoard(this.props.initial);
     this.state = {
-      squares: startingBoard
+      squares: startingBoard,
+      status: {
+        msg: '',
+        color: 'blue'
+      }
     };
   }
 
@@ -35,29 +39,44 @@ class Board extends React.Component {
 
   handleValidation(squares) {
     const cells = sg.elementsToPositions(squares.slice());
+    let msg = 'So far so good!';
+    let color = 'blue';
 
     let neighbours;
     cells.forEach((cell) => {
+      cell.classes.delete(" conflict");
       if (cell.value) {
-        cell.classes.delete(" conflict");
         neighbours = sg.getNeighbours(cell.coords, cells);
         neighbours.forEach((neighbour, i) => {
           if (neighbour) {
             if (String(neighbour.value) === String(cell.value)) {
               cell.classes.add(" conflict");
+              msg = 'Something\'s not quite right';
+              color = 'red';
             }
           }
         });
       }
     });
     let newSquares = sg.elementsToPositions(cells);
-    this.setState({squares: newSquares});
+    this.setState({
+      squares: newSquares,
+      status: {
+        msg: msg,
+        color: color
+      }
+    });
 
     // Check for win
     let hasConflict = cells.map(cell => cell.classes).map(set => set.has(" conflict")).includes(true);
     let hasEmpty = cells.map(cell => cell.value).includes('');
     if (!hasEmpty && !hasConflict) {
-      console.log('Puzzle Solved!!');
+      this.setState({
+        status: {
+          msg: 'Puzzle Solved!!',
+          color: 'green'
+        }
+      });
     }
   }
 
@@ -80,6 +99,9 @@ class Board extends React.Component {
     board.push(<Button className="validation" onClick={() => {
         this.handleValidation(this.state.squares)
       }} key={"v-" + _.random(0, 1000)}>Validate</Button>);
+    board.push(<span className="status" key="stats" style={{
+        color: this.state.status.color
+      }}>{this.state.status.msg}</span>);
     return (board);
   }
 
@@ -106,6 +128,14 @@ class Menu extends React.Component {
     this.initialFilled = 33;
   }
 
+  renderOptions(start, end) {
+    let result = [];
+    for (let i = start; i < end; i++) {
+      result.push(<option value={String(i)}>{i}</option>);
+    }
+    return result;
+  }
+
   render() {
     return (<div>
       <h5>Generate New</h5>
@@ -114,11 +144,17 @@ class Menu extends React.Component {
           <ControlLabel>Initial cells</ControlLabel>
           <FormControl className="difficulty-select" defaultValue={this.initialFilled} inputRef={input => this.initialFilled = input} componentClass="select" placeholder="select">
             <option value="17">17 - Extreme</option>
+            {this.renderOptions(18, 25)}
             <option value="26">26 - Hard</option>
+            {this.renderOptions(27, 32)}
             <option value="33">33 - Medium</option>
+            {this.renderOptions(34, 39)}
             <option value="40">40 - Easy</option>
+            {this.renderOptions(41, 49)}
             <option value="50">50 - Beginner</option>
-            <option value="80">80 - Testing</option>
+            {this.renderOptions(50, 64)}
+            <option value="65">65 - Baby</option>
+            {this.renderOptions(66, 81)}
             <option value="81">81 - Solved</option>
           </FormControl>
         </FormGroup>
@@ -126,6 +162,7 @@ class Menu extends React.Component {
       <Button className="generate-btn" onClick={() => {
           this.props.onGenerate(this.initialFilled.value);
         }}>Generate</Button>
+      <p className="instructions">Select the number of initial cells, then click generate!</p>
     </div>);
 
   }
